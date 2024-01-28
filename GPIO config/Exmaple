@@ -1,0 +1,5 @@
+1. Enable clock of STM32 GPIO ports (PORTA, PORTB, PORTC,...)
+  Ex:  ENABLE_PORTB;
+
+2. Configuring GPIO mode on STM32
+  Ex:  pin_config(PORTB, 13, OUT_2, GPO_PP);   //set pin 13 of GPIOB as OUTPUT with push-pull functionality and maximum frequency of 2MHz.
