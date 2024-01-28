@@ -1,5 +1,6 @@
 #ifndef GPIO_config_H
 #define GPIO_config_H
+
 #include "stm32f10x.h"
 
 // Alternate name for PORT
@@ -35,6 +36,8 @@
 #define AFO_PP   			0x02
 #define AFO_OD        0x03
 
+
+
 typedef struct{
 		GPIO_TypeDef *port;
 		uint8_t  pin;
@@ -44,6 +47,7 @@ typedef struct{
 		uint8_t  speed;
 		uint8_t  alt_func;
 } GPIO_type;
+
 
 void pin_config(GPIO_TypeDef *port, uint8_t pinNumber, uint8_t mode, uint8_t mode_type);  
 
