@@ -35,7 +35,7 @@ void pin_config(GPIO_TypeDef *port, uint8_t pinNumber, uint8_t mode, uint8_t mod
 				port -> CRL |=  1<<(start_bit+2) | 1<<(start_bit+3)  ;
 				break;		
 		}
-	}
+	} //-------------------------------- CHR -----------------------------------
 		else if (pinNumber >=8 && pinNumber <16){
 				uint8_t start_bit = (pinNumber-8)*4;
 		switch(mode){
@@ -74,3 +74,38 @@ void pin_config(GPIO_TypeDef *port, uint8_t pinNumber, uint8_t mode, uint8_t mod
 	}
 }
 	
+
+void GPIO_Write(GPIO_TypeDef *port, uint8_t pinNumber, bool state){
+	if (state == 1){
+			port -> BSRR |=    1<<pinNumber;
+		   port -> BSRR &= ~( 1<<(pinNumber +16) );
+		}
+	else if (state == 0){
+			port -> BSRR |=    1<<(pinNumber + 16);
+		   port -> BSRR &= ~( 1<<pinNumber );
+	}		
+}
+
+void GPIO_Toggle(GPIO_TypeDef *port, uint8_t pinNumber){
+	port -> ODR ^= 1<<pinNumber;     //Only change if ODR initially 0 
+}
+
+void GPIO_init( GPIO_spec MaPin){
+	if (MaPin.port == PORTA)      ENABLE_PORTA;
+	if (MaPin.port == PORTB)      ENABLE_PORTB;
+	if (MaPin.port == PORTC)      ENABLE_PORTC;
+	if (MaPin.port == PORTE)      ENABLE_PORTD;
+	if (MaPin.port == PORTD)      ENABLE_PORTE;
+	pin_config(MaPin.port, MaPin.pin, MaPin.mode, MaPin.mode_type);
+	// Unfinished function, I'll complete this when I need it at a specific task
+
+}
+
+bool GPIO_Read(GPIO_TypeDef *port, uint8_t pinNumber){
+    // Read the input value of the specified pin
+    if ( (port->IDR & (1 << pinNumber)) != 0) {
+        return HIGH;
+    } else {
+        return LOW;
+    }
+}

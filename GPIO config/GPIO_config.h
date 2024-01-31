@@ -2,9 +2,9 @@
 #define GPIO_config_H
 
 #include "stm32f10x.h"
-
-// Alternate name for PORT
-#define PORTA					GPIOA
+#include "stdbool.h"
+// Another name for PORT
+#define PORTA					GP                     IOA
 #define PORTB					GPIOB
 #define PORTC					GPIOC
 #define PORTD					GPIOD
@@ -18,38 +18,48 @@
 #define ENABLE_PORTE        ( RCC -> APB2ENR |= 1<<6 )
 #define ENABLE_AFIO         ( RCC -> APB2ENR |= 1<<0 )
 
-// Pin Modes
-#define INPUT 				0x00
-#define OUT_2         0x02
-#define OUT_10        0x01
-#define OUT_50        0x03
+
+enum STATE{LOW,HIGH};
+// Pin Modos
+enum PinMode{INPUT, OUT_10, OUT_2, OUT_50};
 
 // Input config
-#define INPUT_ANALOG	0x00
-#define INPUT_FLOAT 	0x01
-#define INPUT_PULL		0x02
-#define INPUT_RES			0x03
+enum Input_config{INPUT_ANALOG , INPUT_FLOAT, INPUT_PULL, INPUT_RES};
 
 // Output config
-#define GPO_PP    		0x00
-#define GPO_OD				0x01
-#define AFO_PP   			0x02
-#define AFO_OD        0x03
-
+enum GPO_AFO{GPO_PP, GPO_OD, AFO_PP, AFO_OD};
 
 
 typedef struct{
 		GPIO_TypeDef *port;
 		uint8_t  pin;
 		uint8_t  mode;
-		uint8_t  modet_ype;
+		uint8_t  mode_type;
 		uint8_t  pull;
 		uint8_t  speed;
 		uint8_t  alt_func;
-} GPIO_type;
+} GPIO_spec;
+void GPIO_init( GPIO_spec MaPin);
 
 
+
+// Note: remember to Enable Ports
 void pin_config(GPIO_TypeDef *port, uint8_t pinNumber, uint8_t mode, uint8_t mode_type);  
 
-            
+void GPIO_Write(GPIO_TypeDef *port, uint8_t pinNumber, bool state);         
+
+bool GPIO_Read(GPIO_TypeDef *port, uint8_t pinNumber);
+
+void GPIO_Toggle(GPIO_TypeDef *port, uint8_t pinNumber);
+
+
+
+// Custom Port Manipulation
+void DDR(GPIO_TypeDef *port);
+void PORT(GPIO_TypeDef *port);
+void PIN(GPIO_TypeDef *port);
+
+
+
 #endif
+
